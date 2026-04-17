@@ -8,9 +8,7 @@ app.config.from_object(Config)
 
 @app.route('/')
 def home():
-    sql = 'SELECT id, course_name, description, price, image, currency FROM Course'
-    courses = execute_query(sql, fetch_all=True)
-    return render_template('index.html', courses = courses)
+    return render_template('index.html')
 
 
 
