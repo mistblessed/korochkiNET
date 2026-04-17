@@ -6,7 +6,7 @@
         <h1>Академия дополнительного профессионального образования и профессионального обучения</h1>
         <img src="{{ url_for('static', filename='img/poloska.png') }}" alt="">
         <p>Хотите повысить свою профессиональную квалификацию? Вам нужно усерднее заниматься с помощью хорошего наставника, чтобы улучшить свои рабочие показатели</p>
-        <button class="btn">Выбрать программу</button>
+        <button class="btn"><a href="{{ url_for('auth') }}">Выбрать программу</a></button>
     </div>
     <img class="student" src="{{ url_for('static', filename='img/student.png' ) }}" alt="">
 </div>

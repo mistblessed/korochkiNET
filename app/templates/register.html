@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация | Корочки.есть{% endblock %}
+{% block main %}
+
+<main class="register-section">
+    <div class="register-card">
+        <h2>Создайте аккаунт</h2>
+        <div class="subtitle">Присоединяйтесь и получайте знания</div>
+ <!-- Блок для flash-сообщений (будет работать с Flask) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {% if category == 'success' %}flash-success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+<form method="POST" action="{{ url_for('auth') }}">
+            <div class="form-group">
+                <label for="full_name">Полное имя</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Иванов Иван Иванович" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input type="email" id="email" name="email" placeholder="ivan@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Телефон</label>
+                <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login">Логин</label>
+                <input type="text" id="login" name="login" placeholder="ваш_логин" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" placeholder="минимум 6 символов" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Зарегистрироваться →</button>
+
+            <div class="login-link">
+                Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

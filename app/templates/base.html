@@ -21,11 +21,17 @@
         <span class="logo">Корочки.есть</span>
         <nav>
             <ul>
-                <li><a href="">Главная страница</a></li>
+                <li><a href="{{ url_for('home') }}">Главная страница</a></li>
                 <li><a href="">О нас</a></li>
                 <li><a href="">Курсы</a></li>
-                <li><a href="">Вход</a></li>
-                <li class="btn"><a href="">Начать обучение</a></li>
+                {% if session.user_name %}
+                <li><span>Добро пожаловать, {{session.user_name}}!</span></li>
+                <li><a href="">Личный кабинет</a></li>
+                <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Вход</a></li>
+                <li class="btn"><a href="{{ url_for('auth') }}">Начать обучение</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

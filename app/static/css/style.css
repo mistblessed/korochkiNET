@@ -135,6 +135,10 @@ header nav ul li.btn a:hover{
     padding-bottom: 60px;
 }
 
+.hero--info .btn a{
+    color: #fff;
+}
+
 .hero--info .btn{
     font-size: 18px;
     background: #54BD95;
@@ -295,3 +299,224 @@ footer .left ul li a:hover{
     padding-top: 40px;
 }
 
+.register-section {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .register-card {
+            background: white;
+            max-width: 520px;
+            width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            padding: 2rem 2rem 2.5rem;
+            transition: transform 0.2s;
+        }
+
+        .register-card h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e2a3e;
+            margin-bottom: 0.5rem;
+        }
+
+        .register-card .subtitle {
+            color: #5a6e7c;
+            margin-bottom: 2rem;
+            border-left: 3px solid #449978;
+            padding-left: 12px;
+        }
+
+        /* Форма */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #449978;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #dce4ec;
+            border-radius: 24px;
+            background-color: #fff;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #449978;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+        }
+
+        .btn-primary {
+            background: #449978;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #34755c;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.8rem;
+            color: #5a6e7c;
+        }
+
+        .login-link a {
+            color: #449978;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Flash-сообщения (стилизация под ошибки/успех) */
+        .flash-message {
+            background: #fee2e2;
+            border-left: 5px solid #e53e3e;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #b91c1c;
+        }
+
+        .flash-success {
+            background: #e0f2e9;
+            border-left-color: #2b9348;
+            color: #1e6f3f;
+        }
+
+.login-section {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .login-card {
+            background: white;
+            max-width: 480px;
+            width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            padding: 2rem 2rem 2.5rem;
+            transition: transform 0.2s;
+        }
+
+        .login-card h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e2a3e;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card .subtitle {
+            color: #449978;
+            margin-bottom: 2rem;
+            border-left: 3px solid #2c7da0;
+            padding-left: 12px;
+        }
+
+        /* Форма */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #449978;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #dce4ec;
+            border-radius: 24px;
+            background-color: #fff;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #449978;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+        }
+
+        .btn-primary {
+            background: #449978;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #449978;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.8rem;
+            color: #5a6e7c;
+        }
+
+        .register-link a {
+            color: #449978;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Flash-сообщения */
+        .flash-message {
+            background: #fee2e2;
+            border-left: 5px solid #e53e3e;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #b91c1c;
+        }
+
+        .flash-success {
+            background: #e0f2e9;
+            border-left-color: #2b9348;
+            color: #1e6f3f;
+        }
