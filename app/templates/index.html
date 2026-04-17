@@ -10,7 +10,27 @@
     </div>
     <img class="student" src="{{ url_for('static', filename='img/student.png' ) }}" alt="">
 </div>
-<div class="slider container">
-    
+<div class="withslider container">
+    <div class="textslider">
+        <h1>У нас есть множество различных курсов, что бы вы смогли выбрать, что вам по душе!</h1>
+        <p>Так же у нас есть курсы для инсотранных специалистов</p>
+    </div>
+<div class="slider-section">
+    <button class="slider-btn prev" id="prevBtn">
+        <img src="{{ url_for('static', filename='img/arrow-left.png') }}" alt="Назад">
+    </button>
+
+    <div class="slider-container">
+        <div class="slider" id="slider">
+
+        </div>
+        <div class="dots" id="dots"></div>
+    </div>
+
+    <button class="slider-btn next" id="nextBtn">
+        <img src="{{ url_for('static', filename='img/arrow-right.png') }}" alt="Вперёд">
+    </button>
 </div>
+</div>
+<script src="{{ url_for('static', filename='js/slider.js') }}"></script>
 {% endblock %}

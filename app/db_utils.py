@@ -3,14 +3,7 @@ from psycopg2.extras import RealDictCursor
 from config import Config
 
 def get_db_connection():
-    conn = psycopg2.connect(
-        host='localhost',
-        port='5432',
-        user='postgres',
-        password='5432',
-        dbname='korochki',
-        client_encoding='UTF8'
-    )
+    conn = psycopg2.connect(Config.get_db_uri())
     return conn
 
 def execute_query(query: str, params=None, fetch_one=False, fetch_all=False):

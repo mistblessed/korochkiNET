@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 class Config:
     DB_HOST = os.getenv('DB_HOST','localhost')
     DB_PORT= os.getenv('DB_PORT','5432')
@@ -12,5 +14,4 @@ class Config:
 
     @staticmethod
     def get_db_uri():
-        
         return f'host={Config.DB_HOST} port={Config.DB_PORT} user={Config.DB_USER} password={Config.DB_PASSWORD} dbname={Config.DB_NAME}'
