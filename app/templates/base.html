@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-circles">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        <div class="bg-circle bg-circle-3"></div>
+        <div class="bg-circle bg-circle-4"></div>
+        </div>
+    <header class="container">
+        
+        <span class="logo">Корочки.есть</span>
+        <nav>
+            <ul>
+                <li><a href="">Главная страница</a></li>
+                <li><a href="">О нас</a></li>
+                <li><a href="">Курсы</a></li>
+                <li><a href="">Вход</a></li>
+                <li class="btn"><a href="">Начать обучение</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>{% block main %}{% endblock %}</main>
+    <footer>
+        <div class="footer container">
+            <div class="right">
+                <span class="logo">Корочки.есть</span>
+                <p>© 2026 Образовательный портал «Корочки.есть»</p>
+            </div>
+            <div class="left">
+                <ul>
+                    <li><p class="ptext">Поддержка</p></li>
+                    <li><a href="">Справочный центр</a></li>
+                    <li><a href="">Информация об аккаунте</a></li>
+                    <li><a href="">О нас</a></li>
+                </ul>
+                <ul>
+                    <li><p class="ptext">Помощь и решение</p></li>
+                    <li><a href="">Связаться с поддержкой</a></li>
+                    <li><a href="">Справочная документация</a></li>
+                    <li><a href="">Состояние системы</a></li>
+                </ul>
+                <ul>
+                    <li><p class="ptext">О продукте</p></li>
+                    <li><a href="">Обновление</a></li>
+                    <li><a href="">Безопасность</a></li>
+                    <li><a href="">Ценообразование</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

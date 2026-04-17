@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Корочки.есть{% endblock %}
+{% block main %}
+<div class="hero container">
+    <div class="hero--info">
+        <h1>Академия дополнительного профессионального образования и профессионального обучения</h1>
+        <img src="{{ url_for('static', filename='img/poloska.png') }}" alt="">
+        <p>Хотите повысить свою профессиональную квалификацию? Вам нужно усерднее заниматься с помощью хорошего наставника, чтобы улучшить свои рабочие показатели</p>
+        <button class="btn">Выбрать программу</button>
+    </div>
+    <img class="student" src="{{ url_for('static', filename='img/student.png' ) }}" alt="">
+</div>
+<div class="slider container">
+    
+</div>
+{% endblock %}
