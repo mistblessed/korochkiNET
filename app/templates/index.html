@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Корочки.есть{% endblock %}
 {% block main %}
+<div class="background-circles">
+    <div class="bg-circle bg-circle-3"></div>
+</div>
 <div class="hero container">
     <div class="hero--info">
         <h1>Академия дополнительного профессионального образования и профессионального обучения</h1>
         <img src="{{ url_for('static', filename='img/poloska.png') }}" alt="">
         <p>Хотите повысить свою профессиональную квалификацию? Вам нужно усерднее заниматься с помощью хорошего наставника, чтобы улучшить свои рабочие показатели</p>
-        <button class="btn"><a href="{{ url_for('auth') }}">Выбрать программу</a></button>
+        <button class="btn" id="chooseProgramBtn">Выбрать программу</button>
     </div>
     <img class="student" src="{{ url_for('static', filename='img/student.png' ) }}" alt="">
 </div>
@@ -32,5 +35,59 @@
     </button>
 </div>
 </div>
+
+<div id="courseModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Выберите курс</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="modalCoursesList" class="courses-list">
+                <!-- Сюда загрузятся курсы -->
+                <div class="loading">Загрузка курсов...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для способа оплат-->
+<div id="paymentModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Оформление заявки</h2>
+            <span class="close-payment">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="selectedCourseInfo" class="selected-course-info">
+                <!-- Сюда подставится информация о курсе -->
+            </div>
+            
+            <!-- Блок выбора времени -->
+            <div class="form-section">
+                <label class="section-label">Желаемое время начала обучения</label>
+                <div class="datetime-group">
+                    <input type="date" id="preferDate" class="datetime-input" required>
+                    <input type="time" id="preferTime" class="datetime-input" required>
+                </div>
+                <div class="time-hint">Минимальная дата: завтрашний день</div>
+            </div>
+            
+            <!-- Блок выбора способа оплаты -->
+            <div class="form-section">
+                <label class="section-label">Способ оплаты</label>
+                <div id="paymentMethodsList" class="payment-methods-list">
+                    <!-- Сюда загрузятся способы оплаты -->
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" id="paymentCancelBtn">Назад</button>
+                <button class="modal-btn modal-btn-submit" id="paymentSubmitBtn" disabled>Подтвердить запись</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 {% endblock %}

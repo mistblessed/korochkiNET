@@ -13,7 +13,6 @@
     <div class="background-circles">
         <div class="bg-circle bg-circle-1"></div>
         <div class="bg-circle bg-circle-2"></div>
-        <div class="bg-circle bg-circle-3"></div>
         <div class="bg-circle bg-circle-4"></div>
         </div>
     <header class="container">
@@ -24,19 +23,21 @@
                 <li><a href="{{ url_for('home') }}">Главная страница</a></li>
                 <li><a href="">О нас</a></li>
                 <li><a href="">Курсы</a></li>
-                {% if session.user_name %}
-                <li><span>Добро пожаловать, {{session.user_name}}!</span></li>
-                <li><a href="">Личный кабинет</a></li>
-                <li><a href="{{ url_for('logout') }}">Выход</a></li>
-                {% else %}
-                <li><a href="{{ url_for('login') }}">Вход</a></li>
-                <li class="btn"><a href="{{ url_for('auth') }}">Начать обучение</a></li>
-                {% endif %}
+                {% if session.user_id %}
+        {% if session.role_id == 1 %}
+            <li><a href="/admin">Админ-панель</a></li>
+        {% endif %}
+        <li><a href="/profile">Личный кабинет</a></li>
+        <li><a href="/logout">Выйти</a></li>
+    {% else %}
+        <li><a href="/login">Вход</a></li>
+        <li class="btn"><a href="/register" class="btn-outline">Начать обучение</a></li>
+    {% endif %}
             </ul>
         </nav>
     </header>
-    <main>{% block main %}{% endblock %}</main>
-    <footer>
+    <main class="main-content">{% block main %}{% endblock %}</main>
+    <footer >
         <div class="footer container">
             <div class="right">
                 <span class="logo">Корочки.есть</span>

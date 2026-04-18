@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% block title %}Личный кабинет{% endblock %}
+{% block main %}
+<div class="profile-container">
+    <h1>Личный кабинет</h1>
+    <div class="profile-tabs">
+        <button class="tab-btn active" data-tab="applications">Мои заявки</button>
+        <button class="tab-btn" data-tab="review">Оставить отзыв</button>
+    </div>
+    
+    <!-- Вкладка "Мои заявки" -->
+    <div id="applications-tab" class="tab-content active">
+        <div id="applications-list" class="applications-list">
+            <div class="loading">Загрузка заявок...</div>
+        </div>
+    </div>
+    
+    <!-- Вкладка "Оставить отзыв" -->
+    <div id="review-tab" class="tab-content">
+        <div class="review-form">
+            <div class="rating-stars">
+                <span>Ваша оценка:</span>
+                <div class="stars" id="ratingStars">
+                    <span data-value="1">☆</span>
+                    <span data-value="2">☆</span>
+                    <span data-value="3">☆</span>
+                    <span data-value="4">☆</span>
+                    <span data-value="5">☆</span>
+                </div>
+                <input type="hidden" id="ratingValue" value="0">
+            </div>
+            <textarea id="reviewComment" placeholder="Ваш отзыв о качестве образовательных услуг..." rows="5"></textarea>
+            <button id="submitReviewBtn" class="btn-primary">Отправить отзыв</button>
+            <div id="reviewMessage"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.profile-tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #6c7a89;
+    transition: all 0.2s;
+}
+.tab-btn.active {
+    color: #2c7da0;
+    border-bottom: 2px solid #2c7da0;
+    margin-bottom: -2px;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.applications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.application-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.application-card:hover {
+    transform: translateY(-2px);
+}
+.card-image {
+    width: 200px;
+    flex-shrink: 0;
+}
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.card-info {
+    flex: 1;
+    padding: 20px;
+}
+.card-info h3 {
+    margin: 0 0 10px 0;
+    color: #1e2a3e;
+}
+.card-info .course-desc {
+    color: #5a6e7c;
+    margin-bottom: 12px;
+}
+.card-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+.detail-item {
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+.status {
+    font-weight: bold;
+}
+.status.active { color: #2b9348; }
+.status.completed { color: #2c7da0; }
+.status.cancelled { color: #e53e3e; }
+.price {
+    font-weight: bold;
+    color: #2c7da0;
+}
+.no-applications {
+    text-align: center;
+    padding: 40px;
+    color: #6c7a89;
+}
+.review-form {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 600px;
+}
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.stars span {
+    font-size: 28px;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+.stars span.active,
+.stars span:hover {
+    color: #ffc107;
+}
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dce4ec;
+    border-radius: 12px;
+    font-family: inherit;
+    resize: vertical;
+}
+#submitReviewBtn {
+    margin-top: 15px;
+}
+#reviewMessage {
+    margin-top: 15px;
+}
+@media (max-width: 640px) {
+    .application-card {
+        flex-direction: column;
+    }
+    .card-image {
+        width: 100%;
+        height: 150px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Переключение вкладок
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.dataset.tab;
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (tabId === 'applications') {
+                loadApplications();
+            }
+        });
+    });
+    
+    // Загрузка заявок
+    function loadApplications() {
+        const container = document.getElementById('applications-list');
+        container.innerHTML = '<div class="loading">Загрузка...</div>';
+        
+        fetch('/api/get_user_applications', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    container.innerHTML = `<div class="no-applications">${data.error}</div>`;
+                    return;
+                }
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="no-applications">У вас пока нет заявок</div>';
+                    return;
+                }
+                renderApplications(data);
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = '<div class="no-applications">Ошибка загрузки</div>';
+            });
+    }
+    
+    function renderApplications(apps) {
+        const container = document.getElementById('applications-list');
+        container.innerHTML = '';
+        apps.forEach(app => {
+            const card = document.createElement('div');
+            card.className = 'application-card';
+            card.innerHTML = `
+                <div class="card-image">
+                    <img src="${app.image || '/static/img/placeholder.jpg'}" alt="${escapeHtml(app.course_name)}">
+                </div>
+                <div class="card-info">
+                    <h3>${escapeHtml(app.course_name)}</h3>
+                    <div class="course-desc">${escapeHtml(app.course_description)}</div>
+                    <div class="card-details">
+                        <span class="detail-item">${app.price} ${app.currency}</span>
+                        <span class="detail-item">${app.prefer_time || 'Не указано'}</span>
+                        <span class="detail-item">${app.payment_method || 'Не выбран'}</span>
+                        <span class="detail-item status ${app.status}">${getStatusText(app.status)}</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+    
+    function getStatusText(status) {
+        const map = { 'active': 'Активна', 'completed': 'Завершена', 'cancelled': 'Отменена' };
+        return map[status] || status;
+    }
+    
+    // Звёздный рейтинг
+    const stars = document.querySelectorAll('#ratingStars span');
+    const ratingInput = document.getElementById('ratingValue');
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = parseInt(star.dataset.value);
+            ratingInput.value = value;
+            stars.forEach((s, idx) => {
+                if (idx < value) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+        });
+    });
+    
+    // Отправка отзыва
+    document.getElementById('submitReviewBtn').addEventListener('click', () => {
+        const rating = parseInt(ratingInput.value);
+        const comment = document.getElementById('reviewComment').value.trim();
+        const msgDiv = document.getElementById('reviewMessage');
+        
+        if (rating === 0) {
+            msgDiv.innerHTML = '<span style="color:#e53e3e;">Поставьте оценку</span>';
+            return;
+        }
+        if (!comment) {
+            msgDiv.innerHTML = '<span style="color:#e53e3e;">Напишите отзыв</span>';
+            return;
+        }
+        
+        fetch('/api/submit_review', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rating, comment })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                msgDiv.innerHTML = '<span style="color:#2b9348;">Спасибо! Ваш отзыв отправлен на модерацию.</span>';
+                document.getElementById('reviewComment').value = '';
+                ratingInput.value = 0;
+                stars.forEach(s => s.classList.remove('active'));
+            } else {
+                msgDiv.innerHTML = `<span style="color:#e53e3e;">${data.message}</span>`;
+            }
+        })
+        .catch(err => {
+            msgDiv.innerHTML = '<span style="color:#e53e3e;">Ошибка отправки</span>';
+        });
+    });
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Загружаем заявки при открытии вкладки по умолчанию
+    loadApplications();
+});
+</script>
+{% endblock %}

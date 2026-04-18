@@ -8,8 +8,22 @@ body{
     font-family: "Inter", sans-serif;
 }
 
+.main-content {
+    min-height: calc(100vh - 200px); /* 200px - примерная высота хедера + футера */
+}
+
 a{
     text-decoration: none;
+}
+
+main .www{
+    max-width: 100vh;
+    margin: 0 auto;
+    padding: 40px 20px;
+    flex: 1 1 auto;
+}
+.content-wrapper{
+    display: flex;
 }
 
 img{
@@ -520,3 +534,467 @@ footer .left ul li a:hover{
             border-left-color: #2b9348;
             color: #1e6f3f;
         }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 24px;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #1e2a3e;
+    font-size: 1.5rem;
+}
+
+.close {
+    font-size: 32px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #e53e3e;
+}
+
+.modal-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Список курсов в модальном окне */
+.courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.modal-course-card {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.modal-course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: #54BD95;
+}
+
+.modal-course-card.selected {
+    border-color: #54BD95;
+    background: #e8f4f8;
+}
+
+.modal-course-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.modal-course-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    color: #1e2a3e;
+}
+
+.modal-course-card p {
+    font-size: 0.85rem;
+    color: #6c7a89;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.modal-course-card .price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #54BD95;
+    margin-top: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.modal-btn {
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.modal-btn-cancel {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.modal-btn-cancel:hover {
+    background: #dee2e6;
+}
+
+.modal-btn-submit {
+    background: #54BD95;
+    color: white;
+}
+
+.modal-btn-submit:hover {
+    background: #3e8b6e;
+}
+
+.modal-btn-submit:disabled {
+    background: #adb5bd;
+    cursor: not-allowed;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c7a89;
+}
+
+/* Сообщение для неавторизованных */
+.auth-message {
+    text-align: center;
+    padding: 40px;
+}
+
+.auth-message p {
+    margin-bottom: 20px;
+    color: #495057;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.auth-btn {
+    padding: 10px 24px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.auth-btn-login {
+    background: #54BD95;
+    color: white;
+}
+
+.auth-btn-login:hover {
+    background: #419172;
+}
+
+.auth-btn-register {
+    background: #e9ecef;
+    color: #2c7da0;
+}
+
+.auth-btn-register:hover {
+    background: #dee2e6;
+}
+
+/* Стили для способов оплаты */
+.payment-methods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-method-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method-item:hover {
+    border-color: #54BD95;
+    background: #f8f9fa;
+}
+
+.payment-method-item.selected {
+    border-color: #54BD95;
+    background: #e8f4f8;
+}
+
+.payment-method-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ced4da;
+    border-radius: 50%;
+    margin-right: 16px;
+    position: relative;
+}
+
+.payment-method-item.selected .payment-method-radio::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #54BD95;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.payment-method-info {
+    flex: 1;
+}
+
+.payment-method-name {
+    font-weight: 600;
+    color: #1e2a3e;
+    margin-bottom: 4px;
+}
+
+.payment-method-desc {
+    font-size: 0.85rem;
+    color: #6c7a89;
+}
+
+/* Выбранный курс в модалке оплаты */
+.selected-course-info {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.selected-course-info h4 {
+    margin: 0 0 8px 0;
+    color: #1e2a3e;
+}
+
+.selected-course-info .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #54BD95;
+}
+/* Стили для выбора даты и времени */
+.form-section {
+    margin-bottom: 24px;
+}
+
+.section-label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.datetime-group {
+    display: flex;
+    gap: 12px;
+}
+
+.datetime-input {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1px solid #dce4ec;
+    border-radius: 12px;
+    background-color: #fff;
+    transition: 0.2s;
+    outline: none;
+    font-family: inherit;
+}
+
+.datetime-input:focus {
+    border-color: #54BD95;
+    box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+}
+
+.time-hint {
+    font-size: 0.8rem;
+    color: #6c7a89;
+    margin-top: 8px;
+}
+
+/* Стили для способов оплаты */
+.payment-methods-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.payment-method-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method-item:hover {
+    border-color: #54BD95;
+    background: #f8f9fa;
+}
+
+.payment-method-item.selected {
+    border-color: #54BD95;
+    background: #e8f4f8;
+}
+
+.payment-method-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ced4da;
+    border-radius: 50%;
+    margin-right: 16px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.payment-method-item.selected .payment-method-radio::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #54BD95;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.payment-method-info {
+    flex: 1;
+}
+
+.payment-method-name {
+    font-weight: 600;
+    color: #1e2a3e;
+    margin-bottom: 4px;
+}
+
+.payment-method-desc {
+    font-size: 0.85rem;
+    color: #6c7a89;
+}
+
+.selected-course-info {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.selected-course-info h4 {
+    margin: 0 0 8px 0;
+    color: #1e2a3e;
+}
+
+.selected-course-info .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #54BD95;
+    margin-top: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.modal-btn {
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.modal-btn-cancel {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.modal-btn-cancel:hover {
+    background: #dee2e6;
+}
+
+.modal-btn-submit {
+    background: #54BD95;
+    color: white;
+}
+
+.modal-btn-submit:hover {
+    background: #429475;
+}
+
+.modal-btn-submit:disabled {
+    background: #adb5bd;
+    cursor: not-allowed;
+}
+

@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% block title %}Панель администратора{% endblock %}
+{% block main %}
+<div class="admin-container">
+    <h1>Панель администратора</h1>
+    <p class="admin-subtitle">Управление заявками на обучение</p>
+    
+    <div class="filters">
+        <select id="statusFilter" class="filter-select">
+            <option value="all">Все статусы</option>
+            <option value="active">Новая</option>
+            <option value="in_progress">Идёт обучение</option>
+            <option value="completed">Обучение завершено</option>
+            <option value="cancelled">Отменена</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Поиск по пользователю или курсу..." class="search-input">
+    </div>
+    
+    <div id="applicationsList" class="applications-table-container">
+        <div class="loading">Загрузка заявок...</div>
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+.admin-container h1 {
+    color: #1e2a3e;
+    margin-bottom: 10px;
+}
+.admin-subtitle {
+    color: #6c7a89;
+    margin-bottom: 30px;
+}
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+.filter-select, .search-input {
+    padding: 10px 16px;
+    border: 1px solid #dce4ec;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+.filter-select {
+    min-width: 150px;
+}
+.search-input {
+    flex: 1;
+    min-width: 200px;
+}
+.applications-table-container {
+    background: #fff;
+    border-radius: 16px;
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+.applications-table th,
+.applications-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: top;
+}
+.applications-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+    position: sticky;
+    top: 0;
+}
+.applications-table tr:hover {
+    background: #f8f9fa;
+}
+.course-cell {
+    min-width: 200px;
+}
+.course-cell img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+.user-cell {
+    min-width: 180px;
+}
+.user-name {
+    font-weight: 600;
+    color: #1e2a3e;
+}
+.user-contact {
+    font-size: 0.8rem;
+    color: #6c7a89;
+}
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.status-active { background: #e3f2fd; color: #1976d2; }
+.status-in_progress { background: #fff3e0; color: #f57c00; }
+.status-completed { background: #e8f5e9; color: #388e3c; }
+.status-cancelled { background: #ffebee; color: #d32f2f; }
+.status-select {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #dce4ec;
+    background: #fff;
+    cursor: pointer;
+}
+.status-select:hover {
+    border-color: #54BD95;
+}
+.update-status-btn {
+    background: #54BD95;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 0.8rem;
+}
+.update-status-btn:hover {
+    background: #409172;
+}
+.no-applications {
+    text-align: center;
+    padding: 40px;
+    color: #6c7a89;
+}
+@media (max-width: 768px) {
+    .applications-table th,
+    .applications-table td {
+        padding: 10px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let allApplications = [];
+    
+    function loadApplications() {
+        const container = document.getElementById('applicationsList');
+        container.innerHTML = '<div class="loading">Загрузка заявок...</div>';
+        
+        fetch('/api/admin/applications', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    container.innerHTML = `<div class="no-applications">${data.error}</div>`;
+                    return;
+                }
+                allApplications = data;
+                renderApplications();
+            })
+            .catch(err => {
+                console.error(err);
+                container.innerHTML = '<div class="no-applications">Ошибка загрузки</div>';
+            });
+    }
+    
+    function renderApplications() {
+        const container = document.getElementById('applicationsList');
+        const statusFilter = document.getElementById('statusFilter').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        let filtered = allApplications;
+        
+        // Фильтр по статусу
+        if (statusFilter !== 'all') {
+            filtered = filtered.filter(app => app.status === statusFilter);
+        }
+        
+        // Поиск
+        if (searchTerm) {
+            filtered = filtered.filter(app => 
+                (app.user_name && app.user_name.toLowerCase().includes(searchTerm)) ||
+                (app.user_login && app.user_login.toLowerCase().includes(searchTerm)) ||
+                (app.course_name && app.course_name.toLowerCase().includes(searchTerm))
+            );
+        }
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="no-applications">Заявок не найдено</div>';
+            return;
+        }
+        
+        const table = document.createElement('table');
+        table.className = 'applications-table';
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Курс</th>
+                    <th>Пользователь</th>
+                    <th>Дата создания</th>
+                    <th>Желаемое время</th>
+                    <th>Способ оплаты</th>
+                    <th>Статус</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody id="applicationsTableBody"></tbody>
+        `;
+        
+        const tbody = table.querySelector('#applicationsTableBody');
+        
+        filtered.forEach(app => {
+            const row = document.createElement('tr');
+            
+            // Статус для отображения
+            let statusDisplay = '';
+            let statusClass = '';
+            switch(app.status) {
+                case 'active': statusDisplay = 'Новая'; statusClass = 'status-active'; break;
+                case 'in_progress': statusDisplay = 'Идёт обучение'; statusClass = 'status-in_progress'; break;
+                case 'completed': statusDisplay = 'Обучение завершено'; statusClass = 'status-completed'; break;
+                case 'cancelled': statusDisplay = 'Отменена'; statusClass = 'status-cancelled'; break;
+                default: statusDisplay = app.status; statusClass = 'status-active';
+            }
+            
+            row.innerHTML = `
+                <td class="course-cell">
+                    <img src="${app.image}" alt="${app.course_name}">
+                    <strong>${escapeHtml(app.course_name)}</strong><br>
+                    <small>${app.price} ${app.currency}</small>
+                </td>
+                <td class="user-cell">
+                    <div class="user-name">${escapeHtml(app.user_name)}</div>
+                    <div class="user-contact">${escapeHtml(app.user_login)}</div>
+                    <div class="user-contact">${escapeHtml(app.user_email || '')}</div>
+                    <div class="user-contact">${escapeHtml(app.user_phone || '')}</div>
+                </td>
+                <td>${app.created_at}</td>
+                <td>${app.prefer_time}</td>
+                <td>${app.payment_method || 'Не указан'}</td>
+                <td>
+                    <span class="status-badge ${statusClass}">${statusDisplay}</span>
+                </td>
+                <td>
+                    <select class="status-select" data-id="${app.id}" data-status="${app.status}">
+                        <option value="active" ${app.status === 'active' ? 'selected' : ''}>Новая</option>
+                        <option value="in_progress" ${app.status === 'in_progress' ? 'selected' : ''}>Идёт обучение</option>
+                        <option value="completed" ${app.status === 'completed' ? 'selected' : ''}>Обучение завершено</option>
+                        <option value="cancelled" ${app.status === 'cancelled' ? 'selected' : ''}>Отменена</option>
+                    </select>
+                    <button class="update-status-btn" data-id="${app.id}">Обновить</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        container.innerHTML = '';
+        container.appendChild(table);
+        
+        // Добавляем обработчики для кнопок обновления
+        document.querySelectorAll('.update-status-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const applicationId = this.dataset.id;
+                const select = document.querySelector(`.status-select[data-id="${applicationId}"]`);
+                const newStatus = select.value;
+                updateStatus(applicationId, newStatus);
+            });
+        });
+    }
+    
+    function updateStatus(applicationId, newStatus) {
+        fetch('/api/admin/update_status', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ application_id: applicationId, status: newStatus })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Статус успешно обновлён');
+                loadApplications(); // Перезагружаем список
+            } else {
+                alert('Ошибка: ' + data.message);
+            }
+        })
+        .catch(err => {
+            alert('Ошибка при обновлении статуса');
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Обработчики фильтров
+    document.getElementById('statusFilter').addEventListener('change', renderApplications);
+    document.getElementById('searchInput').addEventListener('input', renderApplications);
+    
+    loadApplications();
+});
+</script>
+{% endblock %}
