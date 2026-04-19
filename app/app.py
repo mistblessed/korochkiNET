@@ -4,6 +4,7 @@ from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from functools import wraps
+import re
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -59,6 +60,18 @@ def home():
     return render_template('index.html')
 
 
+def validate_phone(phone):
+    """
+    Очищает номер телефона от всех нецифровых символов,
+    проверяет длину (от 10 до 11 цифр) и возвращает очищенный номер или None.
+    """
+    # Удаляем всё, кроме цифр
+    digits = re.sub(r'\D', '', phone)
+    # Проверяем длину
+    if len(digits) < 10 or len(digits) > 15:
+        return None
+    return digits
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -67,7 +80,12 @@ def register():
         password = request.form['password']
         full_name = request.form['full_name']
         email = request.form['email']
-        phone = request.form['phone']
+        phone_raw = request.form['phone']
+
+        phone = validate_phone(phone_raw)
+        if not phone:
+            flash('Введите корректный номер телефона (от 10 до 15 цифр)', 'danger')
+            return redirect(url_for('register'))
 
         check_sql = 'SELECT id FROM Users WHERE login = %s'
         existing = execute_query(check_sql, (login,), fetch_one=True)

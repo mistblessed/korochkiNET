@@ -29,10 +29,19 @@
             </div>
 
             <div class="form-group">
-                <label for="phone">Телефон</label>
-                <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67" required>
-            </div>
-
+    <label for="phone">Телефон</label>
+    <input type="tel" 
+           id="phone" 
+           name="phone" 
+           placeholder="+7 (999) 123-45-67"
+           pattern="[\+\d\s\(\)-]{10,20}"
+           title="Введите номер в формате +7 (123) 456-78-90 или 89123456789"
+           required>
+    <small class="form-text text-muted">Пример: +7 (999) 123-45-67 или 89123456789</small>
+    <div class="invalid-feedback" style="display:none; color:#e53e3e; font-size:0.85rem; margin-top:5px;">
+        Пожалуйста, введите корректный номер телефона (10–15 цифр).
+    </div>
+</div>
             <div class="form-group">
                 <label for="login">Логин</label>
                 <input type="text" id="login" name="login" placeholder="ваш_логин" required>
@@ -51,5 +60,28 @@
         </form>
     </div>
 </main>
+<script>
+    const phoneInput = document.getElementById('phone');
+    const phoneFeedback = document.querySelector('#phone + .invalid-feedback');
+
+    phoneInput.addEventListener('input', function() {
+        let value = this.value;
+        // Удаляем все нецифровые символы для подсчёта
+        let digits = value.replace(/\D/g, '');
+        if (digits.length >= 10 && digits.length <= 15) {
+            this.setCustomValidity('');
+            if (phoneFeedback) phoneFeedback.style.display = 'none';
+        } else if (digits.length > 0) {
+            this.setCustomValidity('invalid');
+            if (phoneFeedback) {
+                phoneFeedback.style.display = 'block';
+                phoneFeedback.textContent = 'Номер должен содержать от 10 до 15 цифр. Сейчас: ' + digits.length;
+            }
+        } else {
+            this.setCustomValidity('');
+            if (phoneFeedback) phoneFeedback.style.display = 'none';
+        }
+    });
+</script>
 
 {% endblock %}
