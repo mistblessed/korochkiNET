@@ -21,13 +21,12 @@ def execute_query(sql, params=None, fetch_all=False, fetch_one=False):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(sql, params)
+    result = None
     if fetch_all:
         result = cur.fetchall()
     elif fetch_one:
         result = cur.fetchone()
-    else:
-        result = None
-        conn.commit()
+    conn.commit()          # <-- ДОБАВИТЬ ЭТУ СТРОКУ
     cur.close()
     conn.close()
     return result
