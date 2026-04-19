@@ -61,7 +61,7 @@ def home():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def auth():
+def register():
     if request.method == "POST":
         login = request.form['login']
         password = request.form['password']
@@ -74,7 +74,7 @@ def auth():
 
         if existing:
             flash('Пользователь с таким логином уже зарегестрирован')
-            return redirect(url_for('auth'))
+            return redirect(url_for('register'))
         
         hashed_password = generate_password_hash(password)
 
